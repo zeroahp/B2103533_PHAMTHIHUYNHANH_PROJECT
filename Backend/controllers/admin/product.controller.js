@@ -1,14 +1,42 @@
 const Product = require("../../models/product.model")
+const SearchHelper = require("../../Helper/searchProduct");
 
 module.exports.index = async (req, res) => {
-    const products = await Product.find({
-        deleted: false
-    });
-    const newProducts = products.map(item => {
-        item.priceNew = ((item.price * (100 - item.discountPercentage)) / 100).toFixed(0);
-        return item;
-    });
-    res.send(newProducts);
+    //Search
+    let Search = SearchHelper(req.query);
+
+    const searchObj = {
+        deleted: false,
+    };
+
+    //Search
+    if (req.query.title) {
+        searchObj.title = Search.regex;
+    }
+    // console.log("req.query.title", req.query.title);
+
+
+    //filterStatus
+    if (req.query.status) {
+        searchObj.status = req.query.status;
+    }
+
+    //filterCate
+    if (req.query.category) {
+        searchObj.category = req.query.category;
+    }
+
+    //sort
+    let sort = {};
+    if (req.query.sortKey && req.query.sortValue) {
+        sort[req.query.sortKey] = req.query.sortValue;
+    } else {
+        sort.position = "desc";
+    }
+
+    const products = await Product.find(searchObj)
+        .sort(sort)
+    res.send(products);
 }
 
 //create
@@ -23,6 +51,12 @@ module.exports.create = async (req, res, next) => {
     } else {
         req.body.position = parseInt(req.body.position);
     }
+
+    if (req.body.priceNew === "" || isNaN(req.body.priceNew)) {
+        req.body.priceNew = ((req.body.price * (100 - req.body.discountPercentage)) / 100).toFixed(0);
+
+    }
+    
 
     const product = new Product(req.body);
     await product.save();
@@ -42,7 +76,7 @@ module.exports.editPrint = async (req, res, next) => {
         deleted: false
     });
 
-    console.log(product);
+    // console.log(product);
     res.send(product);
 }
 //End getedit
@@ -51,14 +85,19 @@ module.exports.editPrint = async (req, res, next) => {
 module.exports.update = async (req, res, next) => {
     const id = req.params.id;
     try {
-        req.body.price = parseInt(req.body.price);
         req.body.discountPercentage = parseInt(req.body.discountPercentage);
         req.body.stock = parseInt(req.body.stock);
         req.body.position = parseInt(req.body.position);
 
+        
+        req.body.priceNew = ((req.body.priceNew * (100 - req.body.discountPercentage)) / 100).toFixed(0);
+        
+        console.log("new",req.body.priceNew);
+
         await Product.updateOne({
             _id: id
         }, req.body);
+
         res.send("Cap nhat thanh cong");
     } catch (error) {
         console.error(error);
@@ -91,31 +130,31 @@ module.exports.changeStatus = async (req, res) => {
     try {
         const product = await Product.findById(id);
 
-        if (product.status === 'Active') {
-            product.status = 'Inactive';
-        } else if (product.status === 'Inactive') {
-            product.status = 'Active';
+        if (product.status === 'Hoạt động') {
+            product.status = 'Ngừng hoạt động';
+        } else if (product.status === 'Ngừng hoạt động') {
+            product.status = 'Hoạt động';
         }
         await product.save();
         res.send("Changstatus thành công!");
-
     } catch (error) {
         console.error(error);
     }
 }
 //End changeStatus
 
-//filter
-module.exports.filter = async (req, res) => {
-    const status = req.params.status;
+//detail
+module.exports.detail = async (req, res) => {
+    // try{
+        const id = req.params.id;
 
-    const findActive = await Product.find({
-        status: 'Active'
-    })
+        const product = await Product.find({
+            _id: id,
+            deleted: false
+        })
 
-    const findInactive = await Product.find({
-        status: 'Inactive'
-    })
-
+        res.send(product);
+        console.log(product);
 }
-//End filter
+//End detail
+

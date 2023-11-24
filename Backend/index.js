@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
+const cookieParser = require('cookie-parser');
 
 // error
 const ApiError = require("./api.error");
@@ -12,7 +13,6 @@ database.connect();
 //Router
 const clientRouter = require("./routes/client/index.route");
 const adminRouter = require("./routes/admin/index.route");
-
 const app = express();
 
 //Goi dotenv
@@ -20,15 +20,13 @@ const port = process.env.PORT;
 
 app.use(express.static("public"));
 
-app.use(cors());
+//login
+app.use(cookieParser());
+app.use(cors({
+    credentials: true,
+    origin: ['http://localhost:3001']
+}));
 app.use(express.json());
-
-
-// app.get("/", (req, res) => {
-//     res.json({
-//         message: "Welcome to project"
-//     });
-// });
 
 clientRouter(app);
 adminRouter(app);

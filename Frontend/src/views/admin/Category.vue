@@ -1,9 +1,9 @@
 <template>
-  <div class="admin">
-    <h3 class="blinking-text">Chào mừng đến trang Admin</h3>
-    <AdminCategory 
-      :products="products" 
-      @delete-product="handleDelete" 
+  <div class="category">
+    <AdminCategory
+      :products="products"
+      @delete-product="handleDelete"
+      @filter-cate="handleCategory"
     />
   </div>
 </template>
@@ -23,7 +23,7 @@ export default {
     };
   },
   methods: {
-    async retrieveContacts() {
+    async retrieveProduct() {
       //lấy danh sách sp từ dịch vụ service
       try {
         this.products = await ProductService.getAll();
@@ -68,10 +68,14 @@ export default {
         }
       }
     },
+
+    async handleCategory(filterProduct) {
+      this.products = filterProduct;
+    },
   },
   created() {
-    this.retrieveContacts();
-    
+    this.retrieveProduct();
+
     const id = this.$route.params.id;
     if (id) {
       this.getProduct(id);
@@ -79,3 +83,12 @@ export default {
   },
 };
 </script>
+
+<style>
+.category {
+  position: absolute;
+  left: 180px;
+  top: 80px;
+  right: 0;
+}
+</style>

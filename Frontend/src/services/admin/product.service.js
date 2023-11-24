@@ -1,10 +1,13 @@
 import createApiAdmin from "./api.service";
-class ContactService {
+
+
+class ProductService {
     constructor(baseUrl = "/api/admins") {
         this.api = createApiAdmin(baseUrl);
     }
-    async getAll() {
-        return (await this.api.get("/")).data;
+    
+    async getAll(option = {}) {
+        return (await this.api.get("/", option)).data;
     }
 
     async create(data) {
@@ -12,7 +15,7 @@ class ContactService {
     }
     async get(id) {
         return (await this.api.get(`/${id}`)).data;
-    }  
+    }
     async update(id, data) {
         return (await this.api.put(`/update/${id}`, data)).data;
     }
@@ -22,6 +25,9 @@ class ContactService {
     async changeStatus(id) {
         return (await this.api.patch(`/change-status/${id}`)).data;
     }
-   
+    async detail() {
+        return (await this.api.get(`/detail/${id}`)).data;
+    }
+
 }
-export default new ContactService();
+export default new ProductService();

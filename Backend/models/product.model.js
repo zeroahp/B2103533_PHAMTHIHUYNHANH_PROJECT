@@ -5,12 +5,15 @@ mongoose.plugin(slug);
 
 const productSchema = new mongoose.Schema({
     title: String,
-    // category_id: {
-    //     type: String,
-    //     default: ""
-    // },
+    category: {
+        type: String,
+    },
+    feature:{
+        type: String,
+    },
     description: String,
     price: Number,
+    priceNew: Number,
     discountPercentage: {
         type: Number,
         default:0
@@ -19,7 +22,6 @@ const productSchema = new mongoose.Schema({
     thumbnail: String,
     status: {
         type: String,
-        default: "Inactive"
     },
     position: Number,
     slug: {

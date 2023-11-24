@@ -1,7 +1,11 @@
 <template>
   <div class="admin">
-    <h3>Chào mừng đến trang Admin</h3>
-    <AdminProduct :products="products" @change-status="handleChangeStatus" />
+    <AdminProduct
+      :products="products"
+      @change-status="handleChangeStatus"
+      @filter-admin="handleProductsFilter"
+      @search-pro="handleSearch"
+    />
   </div>
 </template>
 
@@ -16,10 +20,16 @@ export default {
   data() {
     return {
       products: [],
+      searchText: "",
+      activeIndex: -1,
     };
   },
+
+  
+
+  // },
   methods: {
-    async retrieveContacts() {
+    async retrieveProduct() {
       //lấy danh sách sp từ dịch vụ service
       try {
         this.products = await ProductService.getAll();
@@ -38,29 +48,42 @@ export default {
     async handleChangeStatus(productId) {
       try {
         //Thay đổi bên BE
+        console.log("admin", productId);
         await ProductService.changeStatus(productId);
-        
+
         //Cập nhật thay đổi bên FE
-        const productToUpdate = this.products.find(
-          (product) => product._id === productId
+        const productToUpdate = this.products.find((product) =>
+           product._id === productId
         );
 
         if (productToUpdate) {
-          if (productToUpdate.status === "Active") {
-            productToUpdate.status = "Inactive";
+         console.log(" productToUpdate.status",  productToUpdate.status);
+          if (productToUpdate.status === "Hoạt động") {
+            productToUpdate.status = "Ngừng hoạt động";
           } else {
-            productToUpdate.status = "Active";
+            productToUpdate.status = "Hoạt động";
           }
-        } 
+
+         console.log(" productToUpdate.status",  productToUpdate.status);
+
+        }
       } catch (error) {
         console.log(error);
       }
     },
+
+    handleProductsFilter(newProducts) {
+      this.products = newProducts;
+    },
+
+    handleSearch(newProduct) {
+      this.products = newProduct;
+    },
   },
 
   created() {
-    // Gọi phương thức retrieveContacts khi component được tạo
-    this.retrieveContacts();
+    // Gọi phương thức retrieveProduct khi component được tạo
+    this.retrieveProduct();
     const id = this.$route.params.id;
     if (id) {
       this.getProduct(id);
@@ -68,4 +91,13 @@ export default {
   },
 };
 </script>
+<style>
+.admin {
+  position: absolute;
+  left:180px;
+  right: 0;
+  top: 80px;  
+  
+}
 
+</style>

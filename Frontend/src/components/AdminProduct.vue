@@ -1,69 +1,56 @@
 <template >
-  <div class="ad-pro">
-    <Sidebar />
-    <div class="filter">
-      <div class="card">
-        <div class="card-header">Lọc sản phẩm</div>
-        <div class="card-body">
-          <div class="body-one">
-            <div class="card-pro all">
-              <a href="">Tất cả</a>
-            </div>
-            <div class="card-pro active">
-              <a href="">Hoạt động</a>
-            </div>
-            <div class="card-pro inactive">
-              <a href="">Ngừng hoạt động</a>
-            </div>
-          </div>
-          <div class="body-two">
-            <label for="sort">Sắp xếp :</label>
-            <select name="sort" id="sort">
-              <option value="default">Mặc định</option>
-              <option value="pos-asc">Vị trí tăng dần</option> 
-              <option value="pos-desc">Vị trí giảm dần</option>
-              <option value="price-asc">Giá tăng dần</option>
-              <option value="price-desc">Giá giảm dần</option>
-            </select>         
-          </div>
-        </div>
-      </div>
+  <div class="ad-product">
+    <div class="side-right">
+      <Filter
+        @filter-product="handleProductsFilter"
+        @sort-product="handleProductsFilter"
+        @search-product="handleSearch"
+      />
+
       <div class="product-list">
         <table class="table">
-          <thead class="thead-light">
-            <tr>
-              <th scope="col">Vị trí</th>
+          <thead class="thead-dark">
+            <tr class="thead-title">
+              <th class="position" scope="col">Vị trí</th>
+
               <th scope="col">Hình ảnh</th>
               <th scope="col">Tiêu đề</th>
               <th scope="col">Giá</th>
               <th scope="col">Kho</th>
               <th scope="col">Trạng thái</th>
-              <th scope="col">Hành động</th>
+              <th scope="col">Tải lên lúc</th>
             </tr>
           </thead>
+
           <tbody>
             <tr class="item-tb" v-for="item in products" :key="item._id">
-              <td>{{ item.position }}</td>
-              <td>
+              <td class="position">{{ item.position }}</td>
+
+              <td class="thumbnail" @click="detailProduct(item._id)">
                 <img
                   :src="item.thumbnail"
                   alt="Thumbnail"
                   class="product-thumbnail"
                 />
               </td>
-              <td>{{ item.title }}</td>
+              <td class="title">{{ item.title }}</td>
               <td>{{ item.price }}.000đ</td>
               <td>{{ item.stock }} SP</td>
               <td>
-                <button  @click="changeStatus(item._id)" type="button" class="btn btn-success">
+                <button
+                  @click="changeStatus(item._id)"
+                  type="button"
+                  class="btn btn-success"
+                >
                   {{ item.status }}
                 </button>
               </td>
-              <td>
-                <button type="button" class="btn btn-secondary edit">
+              <td class="action">
+                <!-- <button type="button" class="btn btn-secondary edit">
                   Sửa
                 </button>
-                <button type="button" class="btn btn-danger">Xóa</button>
+                <button type="button" class="btn btn-danger">Xóa</button> -->
+                {{item.updatedAt}}
               </td>
             </tr>
           </tbody>
@@ -74,11 +61,12 @@
 </template>
 
 <script>
-import Sidebar from "@/components/Sidebar.vue";
+// import Sidebar from "@/components/Sidebar.vue";
+import Filter from "@/components/AdminFilter.vue";
 
 export default {
   components: {
-    Sidebar,
+    Filter,
   },
   props: {
     products: {
@@ -87,12 +75,65 @@ export default {
     },
   },
   methods: {
-    changeStatus(productId){
-      this.$emit('change-status', productId);
+    changeStatus(productId) {
+      this.$emit("change-status", productId);
+    },
+
+    handleProductsFilter(newProducts) {
+      this.$emit("filter-admin", newProducts);
+      // console.log("newproduct", newProducts);
+    },
+
+    handleSearch(newProduct) {
+      this.$emit("search-pro", newProduct);
+    },
+
+    detailProduct(productId) {
+      this.$router.push({ name: "detail", params: { id: productId } });
+      this.$emit("detail", productId);
     },
   },
   created() {
-    // console.log('Prop "products" đã được truyền vào component:', this.products);
+    // const savedProducts = localStorage.getItem("filteredProducts");
+    // if (savedProducts) {
+    //   this.localProducts = JSON.parse(savedProducts);
+    // } else {
+    //   // this.localProducts = this.products;
+    //   const savedOriginalProducts = localStorage.getItem("originalProducts");
+    //   if (savedOriginalProducts) {
+    //     this.localProducts = JSON.parse(savedOriginalProducts);
+    //   } else {
+    //     this.localProducts = this.products;
+    //   }
+    // }
+    // console.log("localprodut", this.localProducts);
   },
 };
 </script>
+
+
+<style>
+td img {
+  width: 150px;
+  border: 1px solid grey;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.thead-title{
+  text-align: center;
+}
+
+.item-tb td{
+  vertical-align: middle;
+  text-align: center;
+}
+
+.position{
+  width: 4rem ;
+}
+
+.action button{
+  margin-right: 5px;
+}
+</style>

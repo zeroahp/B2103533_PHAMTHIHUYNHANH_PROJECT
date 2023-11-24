@@ -42,7 +42,7 @@ export default {
           timer: 1500, // Tự đóng sau 2 giây (3000ms)
           showConfirmButton: false // Ẩn nút xác nhận
         })
-        this.$router.push({name: "admin"});
+        this.$router.push({name: "product"});
       } catch (error) {
         console.log(error);
       }
@@ -54,3 +54,37 @@ export default {
   },
 };
 </script>
+
+
+<style>
+.admin{
+  /* position: absolute;
+  top: 80px;
+  left: 0;
+  right: 0;
+  width: 100%; */
+  display: flex;
+  flex-direction: column;
+}
+.admin h3{
+  padding: 10px;
+  color: white;
+  font-size: 1.2rem;
+  background-color: #343A40;
+  text-align: center;
+}
+
+.container.create {
+  width: 600px;
+}
+.create-page {
+  margin: 20px 0;
+  border: 1px solid #515151;
+  border-radius: 10px;
+  padding: 35px;
+}
+
+.create-page label {
+  font-weight: 600;
+}
+</style>

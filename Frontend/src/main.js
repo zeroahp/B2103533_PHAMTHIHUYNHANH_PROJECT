@@ -1,6 +1,8 @@
 import { createApp} from 'vue'
-import {createWebHistory, createRouter} from 'vue-router'
 import App from './App.vue'
+
+//vuex
+import store from './store';
 
 // bootstrap
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -16,6 +18,8 @@ import './assets/style.css'
 
 const app = createApp(App);
 
-
-app.use(router).mount('#app'); 
+app.use(router);
+app.use(store);
+app.mount('#app'); 
+// app.use(router).mount('#app'); 
 

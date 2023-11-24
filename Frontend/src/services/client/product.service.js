@@ -1,10 +1,14 @@
 import createApiClient from "./api.service";
-class ContactService {
-    constructor(baseUrl = "/api/products") {
+class ProductService {
+    constructor(baseUrl = "/page-client/product") {
     this.client = createApiClient(baseUrl);
 }
-    async getAll() {
-        return (await this.client.get("/")).data;
+    async getAll(option = {}) {
+        return (await this.client.get("/", option)).data;
     }
+    async get(id) {
+        return (await this.client.get(`/${id}`)).data;
+    }
+    
 }
-export default new ContactService();
+export default new ProductService();

@@ -20,6 +20,22 @@ export default defineConfig({
         target: "http://localhost:3000/",
         changeOrigin : true
       },
+      "/account-admin": {
+        target: "http://localhost:3000/",
+        changeOrigin : true
+      },
+      "/page-client": {
+        target: "http://localhost:3000/",
+        changeOrigin : true
+      },
+      "/page-client/product": {
+        target: "http://localhost:3000/",
+        changeOrigin : true
+      },
+      "/account": {
+        target: "http://localhost:3000/",
+        changeOrigin : true
+      },
     }
 
   },
