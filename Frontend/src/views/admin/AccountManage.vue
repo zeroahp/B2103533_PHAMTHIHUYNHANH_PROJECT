@@ -10,7 +10,7 @@
             <th scope="col">Tên Khách Hàng</th>
             <th scope="col">Email</th>
             <th scope="col">SĐT</th>
-            <th scope="col">Đã mua</th>
+            <th scope="col">Ngày tạo</th>
           </tr>
         </thead>
         <tbody>
@@ -19,6 +19,7 @@
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.phone }}</td>
+            <td>{{ user.updatedAt }}</td>
             <td></td>
           </tr>
         </tbody>

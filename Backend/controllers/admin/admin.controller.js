@@ -187,14 +187,12 @@ module.exports.accountManagement = async (req, res) => {
 //             });
 //         }
 
-//         // Kiểm tra xem người dùng có quyền xóa tất cả người dùng không
 //         // if (!claim.isAdmin) {
 //         //     return res.status(403).send({
 //         //         message: 'unauthorized'
 //         //     });
 //         // }
 
-//         // Nếu có quyền, xóa tất cả người dùng
 //         const result = await Admin.deleteMany();
 
 //         res.send({

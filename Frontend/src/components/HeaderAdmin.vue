@@ -29,23 +29,22 @@
         </ul>
 
         <ul class="product-cartanduser">
-        
-          <li v-if="!isLoggedIn">
+          <!-- <li v-if="!isLoggedIn">
             <router-link :to="{ name: 'register' }" class="nav-link">
               Đăng ký
             </router-link>
-          </li>
+          </li> -->
 
-           <li v-if="!isLoggedIn">
+          <li v-if="!isLoggedIn">
             <router-link :to="{ name: 'login-admin' }" class="nav-link">
               Đăng nhập
             </router-link>
           </li>
 
           <li v-if="isLoggedIn">
-            <router-link :to="{ name: 'login-admin' }" class="nav-link">
+            <button class="btn-logout" @click="showConfirmation">
               Đăng xuất
-            </router-link>
+            </button>
           </li>
         </ul>
       </div>
@@ -55,6 +54,10 @@
 
 <script>
 import { mapState } from 'vuex';
+import AccountService from "@/services/admin/account.service";
+import { reactive } from "vue";
+import Swal from "sweetalert2";
+
 
 export default {
 
@@ -62,8 +65,69 @@ export default {
   isLoggedIn() {
     return this.$store.state.isLoggedIn;
   },
-},
-  setup() {},
+  isLoggedIn() {
+      return this.$store.state.isLoggedIn;
+    },
+  },data() {
+    const userInfo = reactive({
+      name: "",
+      email: "",
+    });
+    return {
+      userInfo,
+    };
+  },
+
+   
+
+  methods: {
+    async mounted() {
+      try {
+        const user = await AccountService.getuser();
+        // Lưu thông tin admin vào biến dữ liệu
+        this.userInfo = user;
+      } catch (error) {
+        console.error("Error fetching admin info:", error);
+        // Xử lý lỗi nếu cần
+      }
+    },
+    async showConfirmation() {
+      try {
+        const result = await Swal.fire({
+          title: "Bạn chắc chắn muốn đăng xuất?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Có",
+        });
+
+        if (result.isConfirmed) {
+          await AccountService.logout();
+          this.$store.commit("SET_LOGIN_STATE", false);
+          Swal.fire({
+            title: "Đăng xuất thành công!",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } else {
+          console.log("Người dùng hủy đăng xuất.");
+        }
+      } catch (error) {
+        console.error("Lỗi khi đăng xuất:", error);
+        Swal.fire({
+          title: "Đã xảy ra lỗi khi đăng xuất",
+          text: "Vui lòng thử lại sau.",
+          icon: "error",
+        });
+      }
+    },
+  
+   created() {
+    this.mounted();
+  },
+  },
 };
 </script>
 

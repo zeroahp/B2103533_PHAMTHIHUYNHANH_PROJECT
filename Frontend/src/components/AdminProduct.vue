@@ -34,7 +34,7 @@
                 />
               </td>
               <td class="title">{{ item.title }}</td>
-              <td>{{ item.price }}.000đ</td>
+              <td>{{ item.priceNew }}.000đ</td>
               <td>{{ item.stock }} SP</td>
               <td>
                 <button

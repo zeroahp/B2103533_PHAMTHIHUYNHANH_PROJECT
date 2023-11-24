@@ -71,8 +71,8 @@
     <div class="sort-product">
       <select name="sort" id="sort" @change="Sort">
         <option value="default">Mặc định</option>
-        <option value="price-asc">Giá tăng dần</option>
-        <option value="price-desc">Giá giảm dần</option>
+        <option value="priceNew-asc">Giá tăng dần</option>
+        <option value="priceNew-desc">Giá giảm dần</option>
         <option value="title-asc">Tên từ A-Z</option>
         <option value="title-desc">Tên từ Z-A</option>
       </select>

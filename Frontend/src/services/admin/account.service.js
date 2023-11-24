@@ -31,6 +31,13 @@ class AccountService {
         }
         return (await this.account.get("/account-management", option)).data;
     }
+
+    async logout(data) {
+        const option = {
+            credentials: 'include',
+        }
+        return (await this.account.post("/logout", data, option)).data;
+    }
     
 
 }

@@ -93,7 +93,7 @@ export default {
   color: white;
   background-color: #343a40;
   width: 180px;
-  height: 680px;
+  height: 100vh;
   z-index: 9;
 
   display: flex;
