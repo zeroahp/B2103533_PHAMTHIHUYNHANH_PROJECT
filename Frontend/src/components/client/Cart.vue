@@ -3,36 +3,7 @@
     <div class="cart-box">
       <div class="cart">
         <h3 class="my-cart">Giỏ Hàng</h3>
-        <!-- <div class="row head-cart">
-          
-          <div class="col-md-3 space-30">
-            <div class="item active center">
-              <p class="icon">01</p>
-              <h3>Giỏ Hàng</h3>
-            </div>
-          </div>
-
-          <div class="col-md-3 space-30">
-            <div class="item center">
-              <p class="icon">02</p>
-              <h3>Đã Đặt Hàng</h3>
-            </div>
-          </div>
-
-          <div class="col-md-3 space-30">
-            <div class="item center">
-              <p class="icon">03</p>
-              <h3>Đang Giao Hàng</h3>
-            </div>
-          </div>
-
-          <div class="col-md-3 space-30">
-            <div class="item center">
-              <p class="icon">04</p>
-              <h3>Đã Giao Hàng</h3>
-            </div>
-          </div>
-        </div> -->
+        
       </div>
     </div>
 
@@ -105,12 +76,18 @@
 <script>
 import Swal from "sweetalert2";
 import AccountService from "@/services/client/account.service";
+import ProductService from "@/services/client/product.service";
 
 export default {
   components: {},
-
+  data() {
+    
+    return {
+      products:[]
+    }
+  },
   computed: {
-    cart() {
+     cart() {
       return this.$store.state.cart;
     },
     totalQuantity() {
@@ -127,6 +104,17 @@ export default {
   },
 
   methods: {
+    // async retrieveProduct() {
+    //   //lấy danh sách sp từ dịch vụ service
+    //   try {
+    //     this.products = await ProductService.cartDetail();
+    //     console.log(this.products);
+    //     console.log("aa");
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
+
     decreaseQuantity(product) {
       this.$store.commit("decreaseQuantity", product);
     },
@@ -166,6 +154,11 @@ export default {
         this.$router.push({ name: "bill-detail" });
       }
     },
+  },
+  created() {
+    // Gọi phương thức retrieveProduct khi component được tạo
+    // this.retrieveProduct();
+    
   },
 };
 </script>

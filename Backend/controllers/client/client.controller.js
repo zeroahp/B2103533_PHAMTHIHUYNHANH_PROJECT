@@ -2,8 +2,7 @@ const User = require("../../models/user.model")
 // const SearchHelper = require("../../Helper/searchProduct");
 const bcrypt = require("bcryptjs");
 const jwt = require('jsonwebtoken');
-const {
-    use
+const {    use
 } = require("../..");
 require("dotenv").config();
 

@@ -13,7 +13,6 @@ module.exports.index = async (req, res) => {
     if (req.query.title) {
         searchObj.title = Search.regex;
     }
-    // console.log("req.query.title", req.query.title);
 
 
     //filterStatus

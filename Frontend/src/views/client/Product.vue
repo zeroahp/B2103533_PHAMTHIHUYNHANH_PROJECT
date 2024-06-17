@@ -55,22 +55,56 @@
  
 <script>
 import ProductService from "@/services/client/product.service";
+import AccountService from "@/services/client/account.service";
 import ProductFilter from "@/components/client/ProductFilter.vue";
 import Swal from "sweetalert2";
+import { reactive } from "vue";
 
 export default {
   components: {
     ProductFilter,
   },
+
+  computed:{
+     isLoggedIn() {
+      return this.$store.state.isLoggedIn;
+    },
+  },
   data() {
+     const userInfo = reactive({
+      name: "",
+      email: "",
+      phone: "",
+    });
+
+    const cart = reactive({
+      user_id : "",
+      product : [
+        {
+          id: "",
+          quantity: "",
+        }
+      ]
+    })
     return {
       products: [],
       searchText: "",
       category: "",
       feature: "",
+      userInfo,
+      cart,
     };
   },
+  
   methods: {
+    async mounted() {
+      try {
+        const user = await AccountService.getuser();
+        this.userInfo = user;
+      } catch (error) {
+        console.error("Error fetching admin info:");
+      }
+    },
     async retrieveProduct() {
       //lấy danh sách sp từ dịch vụ service
       try {
@@ -87,15 +121,61 @@ export default {
         console.log(error);
       }
     },
-    addProductToCart(product) {
-      this.$store.commit("addToCart", product);
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Đã thêm vào giỏ hàng",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+    async addProductToCart(product) {
+       if (!this.isLoggedIn) {
+        try {
+          const result = await Swal.fire({
+            title: "Vui lòng đăng nhập!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Có",
+          });
+
+          if (result.isConfirmed) {
+            this.$router.push({ name: "login-authen" });
+
+            if (this.isLoggedIn) {
+              // const user = await AccountService.getuser();
+              // console.log(product);
+              console.log("+",this.userInfo);
+
+              // await ProductService.addToCart()
+
+              // this.$store.commit("addToCart", product);
+              // Swal.fire({
+              //   position: "top-end",
+              //   icon: "success",
+              //   title: "Đã thêm vào giỏ hàng",
+              //   showConfirmButton: false,
+              //   timer: 1500,
+              // });
+            }
+          }
+        } catch (error) {
+          Swal.fire({
+            title: "Đã xảy ra lỗi khi thanh toán",
+            text: "Vui lòng thử lại sau.",
+            icon: "error",
+          });
+        }
+      } else {
+
+          await ProductService.addToCart(product._id, this.userInfo._id);
+
+        // console.log(product);
+      //   this.$store.commit("addToCart", product);
+      // Swal.fire({
+      //   position: "top-end",
+      //   icon: "success",
+      //   title: "Đã thêm vào giỏ hàng",
+      //   showConfirmButton: false,
+      //   timer: 1500,
+      // });
+      }
+
+      
     },
 
     handleSearch(newProduct) {
@@ -125,6 +205,7 @@ export default {
     if (id) {
       this.getProduct(id);
     }
+    this.mounted();
   },
 };
 </script>

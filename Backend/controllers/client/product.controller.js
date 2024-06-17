@@ -1,4 +1,6 @@
 const Product = require("../../models/product.model")
+const User = require("../../models/user.model")
+const Cart = require("../../models/cart.model")
 const SearchHelper = require("../../Helper/searchProduct");
 
 module.exports.index = async (req, res) => {
@@ -63,3 +65,34 @@ module.exports.getProduct = async (req, res, next) => {
 }
 
 
+module.exports.addToCart = async (req, res, next) => {
+
+    const product_id = req.body.productId;
+    const user_id = req.body.userId;
+
+    const cart = new Cart({
+        user_id: user_id,
+        product : [
+            {
+                product_id: product_id,
+                quantity: 1
+            },
+        ],
+    })
+
+    const result = await cart.save();
+
+    console.log(result);
+}
+
+module.exports.cartDetail = async (req, res, next) => {
+
+    const cart = await Cart.find(
+        {
+            deleted: false,
+        }
+    )
+
+    console.log(cart);
+    res.send(cart);
+}

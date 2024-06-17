@@ -154,14 +154,6 @@ module.exports.accountManagement = async (req, res) => {
             })
         }
 
-        // Kiểm tra xem người dùng có quyền truy cập thông tin tất cả người dùng hay không
-        // if (!claim.isAdmin) {
-        //     return res.status(403).send({
-        //         message: 'unauthorized'
-        //     });
-        // }
-
-        // Nếu có quyền truy cập, lấy thông tin tất cả người dùng
         const user = await User.find({}, '-passwd'); // Lấy tất cả người dùng, loại bỏ trường 'passwd'
 
         res.send(user);
@@ -173,38 +165,6 @@ module.exports.accountManagement = async (req, res) => {
     }
 }
 
-//deletedAll
-
-// module.exports.deleteAll = async (req, res) => {
-//     try {
-//         const cookie = req.cookies['jwt'];
-
-//         const claim = jwt.verify(cookie, process.env.KEY);
-
-//         if (!claim) {
-//             return res.status(401).send({
-//                 message: 'unauthenticated'
-//             });
-//         }
-
-//         // if (!claim.isAdmin) {
-//         //     return res.status(403).send({
-//         //         message: 'unauthorized'
-//         //     });
-//         // }
-
-//         const result = await Admin.deleteMany();
-
-//         res.send({
-//             message: `Deleted ${result.deletedCount} users`
-//         });
-//     } catch (error) {
-//         return res.status(401).send({
-//             message: 'unauthenticated'
-//         });
-//     }
-// };
-// //End deletedAll
 
 //logout
 module.exports.logout = async (req, res) => {

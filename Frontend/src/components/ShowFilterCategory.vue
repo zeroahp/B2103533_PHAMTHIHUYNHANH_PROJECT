@@ -83,7 +83,7 @@ export default {
         });
 
         // Thực hiện lọc sản phẩm và cập nhật danh sách
-        const newProduct = await ProductService.getAll({ params: query });
+        
 
         if (newProduct) {
           this.$emit("filter-category", newProduct);

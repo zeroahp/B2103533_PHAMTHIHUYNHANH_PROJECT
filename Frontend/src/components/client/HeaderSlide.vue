@@ -18,7 +18,9 @@
         </div>
       </div>
       <div class="btn-shopping">
-        <a class="buy-product"> Mua sản phẩm </a>
+        <router-link :to="{ name: 'product-client' }" class="nav-link buy-product">
+          Mua sản phẩm
+        </router-link>
       </div>
     </div>
 
@@ -195,7 +197,7 @@ export default {
     font-size: 4rem;
   }
 
-  .content p{
+  .content p {
     font-size: 0.9rem;
   }
   .btn-shopping a {
@@ -204,17 +206,15 @@ export default {
     border-radius: 25px;
   }
 }
-@media (max-width: 576px){
- .flower-outer img {
+@media (max-width: 576px) {
+  .flower-outer img {
     width: 180px;
-    
-  } 
+  }
 
   .overlay-content {
     width: 350px;
     height: 200px;
   }
-
 
   .content {
     width: 250px;
@@ -224,9 +224,9 @@ export default {
     font-size: 2rem;
   }
 
-    .content p{
-      font-size: 0.8rem;
-    }
+  .content p {
+    font-size: 0.8rem;
+  }
   .btn-shopping a {
     background-color: #e0868f;
     padding: 5px 15px;
@@ -234,6 +234,4 @@ export default {
     font-size: 0.8rem;
   }
 }
-
-
 </style>
